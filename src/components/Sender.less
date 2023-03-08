@@ -1,0 +1,26 @@
+.sender {
+  display: flex;
+  flex-direction: column;
+  & > &__header {
+    padding: 5px;
+    div.action {
+      color: var(--td-text-color-secondary);
+      user-select: none;
+      cursor: pointer;
+      transition: .2s;
+      &:hover {
+        color: var(--td-brand-color-hover);
+      }
+    }
+  }
+  & > &__body {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+    > .t-textarea > textarea {
+      line-height: 28px;
+      font-size: 18px;
+    }
+  }
+}

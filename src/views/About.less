@@ -1,0 +1,13 @@
+div.about-page {
+  padding: 10px 20px;
+  width: calc(100% - 40px) !important;
+  > div.icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(50% - 5px), 1fr));
+    gap: 10px;
+    > a, > a > img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

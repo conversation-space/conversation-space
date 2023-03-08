@@ -1,0 +1,97 @@
+.touch-bar {
+  container: touch-bar / inline-size;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--td-bg-color-component);
+  & > &__chatrooms {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    > div.trigger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 50px;
+      max-width: calc(100% - 14px);
+      height: 50px;
+      cursor: pointer;
+      > div.t-avatar.user-avatar {
+        min-width: 38px;
+        height: 38px;
+        user-select: none;
+      }
+    }
+  }
+  & > &__opts {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    > button > .t-button__text > span.desc {
+      margin-left: 5px;
+    }
+  }
+}
+@container touch-bar (max-width: 160px) {
+  .touch-bar__chatrooms {
+    > div.trigger {
+      &.active > div.t-avatar.user-avatar {
+        border: 2px solid var(--td-brand-color);
+        box-shadow: var(--td-shadow-2);
+      }
+      > div.t-avatar.user-avatar {
+        width: 40px;
+        border: 2px solid var(--td-text-color-secondary);
+        transition: .2s;
+        &:hover {
+          box-shadow: var(--td-shadow-1);
+        }
+      }
+      > div.content {
+        display: none;
+      }
+    }
+  }
+  .touch-bar__opts > button > .t-button__text > span.desc {
+    display: none;
+  }
+}
+@container touch-bar (min-width: 160px) and (max-width: 200px) {
+  .touch-bar__chatrooms > div.trigger > div.content > div.desc {
+    display: none;
+  }
+}
+@container touch-bar (min-width: 160px) and (max-width: 300px) {
+  .touch-bar__chatrooms {
+    > div.trigger {
+      width: calc(100% - 30px);
+      padding: 5px;
+      gap: 10px;
+      border: 2px solid var(--td-text-color-secondary);
+      border-radius: var(--td-radius-default);
+      transition: .2s;
+      &:hover, &.active {
+        box-shadow: var(--td-shadow-1);
+        border: 2px solid var(--td-success-color);
+      }
+      &.active {
+        border: 2px solid var(--td-brand-color);
+      }
+      > div.content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        > div.title {
+          font-size: 14px;
+        }
+        > div.desc {
+          font-size: 10px;
+          color: var(--td-text-color-secondary);
+        }
+      }
+    }
+  }
+}

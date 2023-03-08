@@ -1,0 +1,25 @@
+.theme-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  .theme {
+    &.active > div.t-card {
+      border: 2px solid var(--td-brand-color);
+    }
+    > div.t-card {
+      margin-bottom: 5px;
+      height: 80px;
+      user-select: none;
+      cursor: pointer;
+      transition: .2s;
+      border: 2px solid var(--td-border-level-1-color);
+      overflow: hidden;
+      > div.t-card__body {
+        display: flex;
+        padding: 0;
+        height: 100%;
+      }
+    }
+  }
+}

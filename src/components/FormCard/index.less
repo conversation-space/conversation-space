@@ -1,0 +1,27 @@
+.form-card {
+  > div.t-card__body {
+    padding: 10px 25px;
+  }
+  > div.t-card__header ~ div.t-card__body {
+    border-top: 1px solid var(--td-border-level-1-color);
+  }
+  div.form-card__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    &:nth-child(n + 2) {
+      border-top: 1px solid var(--td-border-level-1-color);
+    }
+    &.tall {
+      align-items: start;
+    }
+    > div.label {
+      font-size: 15px;
+      > div.desc {
+        font-size: 12px;
+        color: var(--td-text-color-secondary);
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+div.tabs {
+  display: flex;
+  align-items: end;
+  height: 65px;
+  border-bottom: 2px solid var(--td-border-level-1-color);
+  > div.tab {
+    order: 10;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    color: var(--td-text-color-secondary);
+    font-size: 14px;
+    user-select: none;
+    cursor: pointer;
+    transition: 1s;
+    &.active {
+      order: 1;
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--td-brand-color);
+      margin-right: 200px;
+    }
+    &:hover {
+      font-weight: bold;
+      color: var(--td-brand-color);
+    }
+  }
+}

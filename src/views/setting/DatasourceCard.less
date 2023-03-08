@@ -1,0 +1,18 @@
+.datasource-card {
+  > .t-card__body > div.form-card__item > div.input > div.users {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    height: 165px;
+    overflow: overlay;
+    padding: 10px;
+    > div.user-card {
+      user-select: none;
+      border-radius: var(--td-radius-default);
+      transition: .2s;
+    }
+    > div.user-card:hover {
+      box-shadow: var(--td-shadow-1);
+    }
+  }
+}
