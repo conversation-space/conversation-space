@@ -43,6 +43,15 @@ function useChatroom(chatroom: DSChatroom) {
     [u.id]: u,
     ...acc,
   }), {}) ?? {}, [users])
+
+  useEffect(() => {
+    const onMessage: Parameters<typeof datasourceCtx.on>[2] = function (chatroomId, message) {
+      mutate();
+    }
+    datasourceCtx.on('message', chatroom, onMessage)
+    return () => datasourceCtx.off('message', chatroom, onMessage)
+  }, [datasourceCtx])
+
   return {
     isLoading: isLoading || isLoadingUsers,
     messages: messages.map(m => ({

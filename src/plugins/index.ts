@@ -21,6 +21,8 @@ export interface DatasourceFetcher {
 export interface Datasource extends DatasourceFetcher {
   type: string
   me: User
+  on: (type: 'message', cb: (chatroomId: string, message: Message) => void) => void
+  off: (type: 'message', cb: (chatroomId: string, message: Message) => void) => void
 }
 
 export interface DSChatroom extends Chatroom {

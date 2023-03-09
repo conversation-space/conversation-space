@@ -12,7 +12,8 @@ export interface DatasourceContext {
     dsChatroom: Pick<DSChatroom, 'id' | 'dsIndex'>,
     content: Message['content'],
   ): void
-  // on(type: 'message', dsChatroom: Pick<DSChatroom, 'dsIndex'>): void
+  on(type: 'message', dsChatroom: Pick<DSChatroom, 'dsIndex'>, callback: (chatroomId: string, message: Message) => void): void
+  off(type: 'message', dsChatroom: Pick<DSChatroom, 'dsIndex'>, callback: (chatroomId: string, message: Message) => void): void
 }
 
 export const datasourceContext = createContext<DatasourceContext | null>(null)
@@ -57,6 +58,14 @@ export function createDatasourceContext(datasources: Datasource[]) {
     async getChatroomUsers(chatroom, userIds) {
       const datasource = datasources[chatroom.dsIndex]
       return datasource.getUsers(userIds)
+    },
+    on(type, chatroom, callback) {
+      const datasource = datasources[chatroom.dsIndex]
+      datasource.on(type, callback)
+    },
+    off(type, chatroom, callback) {
+      const datasource = datasources[chatroom.dsIndex]
+      datasource.off(type, callback)
     }
   } as DatasourceContext
 }

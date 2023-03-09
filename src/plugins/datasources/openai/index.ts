@@ -3,7 +3,7 @@ import { Chatroom, Message, User } from 'conversation-space'
 
 import { Configuration, OpenAIApi } from 'openai'
 
-const API_KEY = import.meta.env.OPENAI_API_KEY as string
+const API_KEY = import.meta.env.VITE_OPENAI_API_KEY as string
 
 const openai = new OpenAIApi(new Configuration({ apiKey: API_KEY }))
 
@@ -12,7 +12,28 @@ const me = {
   name: '一介',
   tags: ['Master'],
   avatar: 'https://avatars.githubusercontent.com/u/51358815?v=4',
-};
+}
+
+const emitter = {
+  calbackMaps: new Map<string, Set<Function>>(),
+  emit(type: string, ...args: any[]) {
+    const callbacks = this.calbackMaps.get(type)
+    if (callbacks) {
+      callbacks.forEach(cb => cb(...args))
+    }
+  },
+  on(type: string, cb: Function) {
+    const set = this.calbackMaps.get(type) || new Set()
+    set.add(cb)
+    this.calbackMaps.set(type, set)
+  },
+  off(type: string, cb: Function) {
+    const set = this.calbackMaps.get(type)
+    if (set) {
+      set.delete(cb)
+    }
+  }
+}
 
 const openaiDataSource: Datasource & {
   store: {
@@ -66,7 +87,18 @@ const openaiDataSource: Datasource & {
       ...content,
     }
     messages[chatroomId].push(message)
-    const completion = await openai.createChatCompletion({
+    // new Promise(re => setTimeout(re, 1000)).then(() => {
+    //   const otherUser = chatrooms.find(c => c.id === chatroomId)?.members.filter(id => id !== this.me.id)[0]
+    //   let m = {
+    //     id: String(chatroomMessages.length + 1),
+    //     userId: otherUser ?? '',
+    //     content: 'test content',
+    //     datetime: new Date().toLocaleString(),
+    //   }
+    //   emitter.emit('message', chatroomId, m)
+    //   messages[chatroomId].push(m)
+    // })
+    openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [
         {
@@ -86,18 +118,21 @@ const openaiDataSource: Datasource & {
         }))
       ],
     })
+      .then(completion => {
+        const m = completion.data.choices[0].message
+        if (!m)
+          throw new Error('No message returned from OpenAI')
 
-    const m = completion.data.choices[0].message
-    if (!m)
-      throw new Error('No message returned from OpenAI')
-
-    const otherUser = chatrooms.find(c => c.id === chatroomId)?.members.filter(id => id !== this.me.id)[0]
-    chatroomMessages.push({
-      id: String(chatroomMessages.length + 1),
-      userId: otherUser ?? '',
-      content: m.content,
-      datetime: new Date().toLocaleString(),
-    })
+        const otherUser = chatrooms.find(c => c.id === chatroomId)?.members.filter(id => id !== this.me.id)[0]
+        const message = {
+          id: String(chatroomMessages.length + 1),
+          userId: otherUser ?? '',
+          content: m.content,
+          datetime: new Date().toLocaleString(),
+        }
+        chatroomMessages.push(message)
+        emitter.emit('message', chatroomId, message)
+      })
 
     return message
   },
@@ -183,7 +218,9 @@ const openaiDataSource: Datasource & {
     return [
       ...this.store.chatrooms
     ]
-  }
+  },
+  on: emitter.on.bind(emitter),
+  off: emitter.off.bind(emitter),
 }
 
 window.conversationSapce?.register('datasource', openaiDataSource)
